@@ -11,17 +11,18 @@ pipeline {
       }
     }
     stage('Set Up') {
-      steps {
-        sh 'python3 -m pip install --upgrade pip'
-        sh 'python3 -m pip install -r requirements.txt'
-      }
-    }
-    stage('Verify') {
-      steps {
-        sh 'python3 -m py_compile app.py'
-        sh 'python3 -c "from app import app; print(app.url_map)"'
-      }
-    }
+  steps {
+    sh 'python3 -m venv venv'
+    sh 'venv/bin/pip install --upgrade pip'
+    sh 'venv/bin/pip install -r requirements.txt'
+  }
+}
+stage('Verify') {
+  steps {
+    sh 'venv/bin/python -m py_compile app.py'
+    sh 'venv/bin/python -c "from app import app; print(app.url_map)"'
+  }
+}
   }
   post {
     always {
